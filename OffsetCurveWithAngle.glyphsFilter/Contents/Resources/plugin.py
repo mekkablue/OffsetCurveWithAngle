@@ -33,13 +33,15 @@ class OffsetCurveWithAngle(FilterWithDialog):
 	def settings(self):
 		self.menuName = Glyphs.localize({
 			'en': u'Offset Curve with Angle',
-			'de': u'Verfetten mit Winkel'
+			'de': u'Verfetten mit Winkel',
+			'es': u'Desplazar curva con ángulo',
 		})
 		
 		# Word on Run Button (default: Apply)
 		self.actionButtonLabel = Glyphs.localize({
 			'en': u'Offset', 
-			'de': u'Verfetten'
+			'de': u'Verfetten',
+			'es': u'Desplazar',
 		})
 		
 		# Load dialog from .nib (without .extension)
