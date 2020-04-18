@@ -1,4 +1,5 @@
 # encoding: utf-8
+from __future__ import division, print_function, unicode_literals
 
 ###########################################################################################################
 #
@@ -17,6 +18,7 @@
 import objc, math
 from GlyphsApp import *
 from GlyphsApp.plugins import *
+from Foundation import NSClassFromString
 
 class OffsetCurveWithAngle(FilterWithDialog):
 	
@@ -30,24 +32,28 @@ class OffsetCurveWithAngle(FilterWithDialog):
 	yOffsetField = objc.IBOutlet()
 	angleField = objc.IBOutlet()
 	
+	@objc.python_method
 	def settings(self):
 		self.menuName = Glyphs.localize({
-			'en': u'Offset Curve with Angle',
-			'de': u'Verfetten mit Winkel',
-			'es': u'Desplazar curva con ángulo',
+			'en': 'Offset Curve with Angle',
+			'de': 'Verfetten mit Winkel',
+			'es': 'Desplazar curva con ángulo',
+			'fr': 'Épaissir le tracé avec un angle',
 		})
 		
 		# Word on Run Button (default: Apply)
 		self.actionButtonLabel = Glyphs.localize({
-			'en': u'Offset', 
-			'de': u'Verfetten',
-			'es': u'Desplazar',
+			'en': 'Offset', 
+			'de': 'Verfetten',
+			'es': 'Desplazar',
+			'fr': 'Épaissir',
 		})
 		
 		# Load dialog from .nib (without .extension)
 		self.loadNib('IBdialog', __file__)
 	
 	# On dialog show
+	@objc.python_method
 	def start(self):
 		
 		# Set default value
@@ -82,6 +88,7 @@ class OffsetCurveWithAngle(FilterWithDialog):
 		self.update()
 	
 	# Actual filter
+	@objc.python_method
 	def filter(self, layer, inEditView, customParameters):
 		xOffset = 15.0
 		yOffset = 10.0
@@ -103,7 +110,7 @@ class OffsetCurveWithAngle(FilterWithDialog):
 		self.offsetLayer( layer, xOffset, yOffset )
 		layer.applyTransform(self.transform( rotate=angle ).transformStruct())
 			
-	
+	@objc.python_method
 	def transform(self, shiftX=0.0, shiftY=0.0, rotate=0.0, skew=0.0, scale=1.0):
 		"""
 		Returns an NSAffineTransform object for transforming layers.
@@ -135,17 +142,29 @@ class OffsetCurveWithAngle(FilterWithDialog):
 			myTransform.appendTransform_(skewTransform)
 		return myTransform
 	
-	def offsetLayer( self, thisLayer, offsetX, offsetY, makeStroke=False, position=0.5, autoStroke=False ):
+	@objc.python_method
+	def offsetLayer( self, thisLayer, offsetX, offsetY, makeStroke=True, position=0.5, autoStroke=False ):
 		offsetFilter = NSClassFromString("GlyphsFilterOffsetCurve")
-		offsetFilter.offsetLayer_offsetX_offsetY_makeStroke_autoStroke_position_error_shadow_(
-			thisLayer,
-			offsetX, offsetY, # horizontal and vertical offset
-			makeStroke,     # if True, creates a stroke
-			autoStroke,     # if True, distorts resulting shape to vertical metrics
-			position,       # stroke distribution to the left and right, 0.5 = middle
-			None, None )
-		
-		
+		try:
+			# GLYPHS 3:	
+			offsetFilter.offsetLayer_offsetX_offsetY_makeStroke_autoStroke_position_metrics_error_shadow_capStyleStart_capStyleEnd_keepCompatibleOutlines_(
+				thisLayer,
+				offsetX, offsetY, # horizontal and vertical offset
+				makeStroke,     # if True, creates a stroke
+				autoStroke,     # if True, distorts resulting shape to vertical metrics
+				position,       # stroke distribution to the left and right, 0.5 = middle
+				None, None, None, 0, 0, False )
+		except:
+			# GLYPHS 2:
+			offsetFilter.offsetLayer_offsetX_offsetY_makeStroke_autoStroke_position_error_shadow_(
+				thisLayer,
+				offsetX, offsetY, # horizontal and vertical offset
+				makeStroke,     # if True, creates a stroke
+				autoStroke,     # if True, distorts resulting shape to vertical metrics
+				position,       # stroke distribution to the left and right, 0.5 = middle
+				None, None )
+	
+	@objc.python_method
 	def generateCustomParameter( self ):
 		return "%s; xOffset:%s; yOffset:%s; angle:%s;" % (
 			self.__class__.__name__,
@@ -154,6 +173,7 @@ class OffsetCurveWithAngle(FilterWithDialog):
 			Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.angle'],
 			)
 	
+	@objc.python_method
 	def __file__(self):
 		"""Please leave this method unchanged"""
 		return __file__
