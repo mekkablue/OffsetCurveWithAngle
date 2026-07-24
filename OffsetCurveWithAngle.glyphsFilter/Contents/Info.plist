@@ -13,9 +13,9 @@
 	<key>CFBundleName</key>
 	<string>OffsetCurveWithAngle</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.3</string>
+	<string>2.31</string>
 	<key>CFBundleVersion</key>
-	<string>7</string>
+	<string>8</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright, Rainer Erich Scheichelbauer, 2018</string>
 	<key>NSPrincipalClass</key>
