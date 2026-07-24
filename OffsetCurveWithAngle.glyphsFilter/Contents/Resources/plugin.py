@@ -16,9 +16,10 @@ from __future__ import division, print_function, unicode_literals
 ###########################################################################################################
 
 import objc, math
-from GlyphsApp import *
-from GlyphsApp.plugins import *
+from GlyphsApp import Glyphs
+from GlyphsApp.plugins import FilterWithDialog
 from Foundation import NSClassFromString
+from AppKit import NSAffineTransform, NSAffineTransformStruct
 
 class OffsetCurveWithAngle(FilterWithDialog):
 	
