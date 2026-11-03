@@ -1,6 +1,3 @@
-# encoding: utf-8
-from __future__ import division, print_function, unicode_literals
-
 ###########################################################################################################
 #
 #
@@ -63,9 +60,9 @@ class OffsetCurveWithAngle(FilterWithDialog):
 		Glyphs.registerDefault('com.mekkablue.OffsetCurveWithAngle.angle', 27.0)
 		
 		# Set value of text field
-		self.xOffsetField.setStringValue_(Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.xOffset'])
-		self.yOffsetField.setStringValue_(Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.yOffset'])
-		self.angleField.setStringValue_(Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.angle'])
+		self.xOffsetField.setFloatValue_(Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.xOffset'])
+		self.yOffsetField.setFloatValue_(Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.yOffset'])
+		self.angleField.setFloatValue_(Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.angle'])
 		
 		# Set focus to text field
 		self.xOffsetField.becomeFirstResponder()
@@ -73,19 +70,19 @@ class OffsetCurveWithAngle(FilterWithDialog):
 	# Action triggered by UI
 	@objc.IBAction
 	def setXOffset_( self, sender ):
-		Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.xOffset'] = sender.floatValue()
+		Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.xOffset'] = self.xOffsetField.floatValue()
 		self.update()
 	
 	# Action triggered by UI
 	@objc.IBAction
 	def setYOffset_( self, sender ):
-		Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.yOffset'] = sender.floatValue()
+		Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.yOffset'] = self.yOffsetField.floatValue()
 		self.update()
 	
 	# Action triggered by UI
 	@objc.IBAction
 	def setAngle_( self, sender ):
-		Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.angle'] = sender.floatValue()
+		Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.angle'] = self.angleField.floatValue()
 		self.update()
 	
 	# Actual filter
@@ -96,11 +93,11 @@ class OffsetCurveWithAngle(FilterWithDialog):
 		angle = 27.0
 		
 		if not inEditView:
-			if customParameters.has_key('xOffset'):
+			if 'xOffset' in customParameters:
 				xOffset = customParameters['xOffset']
-			if customParameters.has_key('yOffset'):
+			if 'yOffset' in customParameters:
 				yOffset = customParameters['yOffset']
-			if customParameters.has_key('angle'):
+			if 'angle' in customParameters:
 				angle = customParameters['angle']
 		else:
 			xOffset = float(Glyphs.defaults['com.mekkablue.OffsetCurveWithAngle.xOffset'])
